@@ -1,1 +1,0 @@
-The Linux kernel is a Unix-like computer operating system kernel.
