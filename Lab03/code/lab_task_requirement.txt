@@ -1,0 +1,5 @@
+1. finding child pid
+2. using sleep to in child process for n seconds
+3. print out the status of the child termination with its pid
+4. printing parent pid 
+5. using wait
