@@ -40,19 +40,28 @@ void process_cmd(char *cmdline)
 		exit(0);
 	}
 
-	char buffer[4];
+	char program_name[2][32] = {0}, option[2][16] = {0};
 	int seconds, status;
-	sscanf(cmdline, "%*s %s", buffer);
-	seconds = atoi(buffer);
 
+	sscanf(cmdline, "%s %*s %s %s", program_name[0], program_name[1], option[1]);
+	seconds = atoi(option[0]);
+	printf("%s %s %s \n", program_name[0], program_name[1], option[1]);
+	
+	int pfds[2];
+	pipe(pfds);	
 	pid_t pid = fork();
 	if(pid == 0){
-		printf("child pid %d is started\n", getpid());
-		sleep(seconds);
-		printf("child pid %d is terminated with status %d\n", getpid(), status);
-		exit(0);
+		close(1);
+		dup(pfds[1]);
+		close(pfds[0]);
+		execlp(program_name[0], program_name[0], NULL);
+		//exit(0);
 	}else if(pid > 0){
-		wait(&status);
+		close(0);
+		dup(pfds[0]);
+		close(pfds[1]);
+		wait(0);
+		execlp(program_name[1], program_name[1], option[1], NULL);
 	}
 
 }
